@@ -1,0 +1,22 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: flaskapi-ci-test
+spec:
+  selector:
+    matchLabels:
+      app: flaskapi-ci-test
+  template:
+    metadata:
+      labels:
+        app: flaskapi-ci-test
+    spec:
+      containers:
+        - name: flaskapi-ci-test
+          image: flask-api:latest
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 5000
