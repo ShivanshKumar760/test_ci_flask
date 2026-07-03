@@ -51,5 +51,27 @@ def create():
     users.append(new_user)
     return jsonify(new_user),201
 
+@app.put("/users/<int:user_id>")
+def update_user(user_id):
+    user = find_user(user_id)
+    if not user:
+        return jsonify({"error":"User not found"}),404
+    data = request.get_json()
+    if not data:
+        return jsonify({"error":"Request Body must be JSON"}),400
+    
+    if "name" in data:
+        user["name"] = data["name"]
+    if "email" in data:
+        user["email"] = data["email"]
+    return jsonify(user),200
+
+@app.delete("/users/<int:user_id>")
+def delete_user(user_id):
+    user=find_user(user_id)
+    if not user:
+        return jsonify({"error":"User not found"}),404
+    users.remove(user)
+    return jsonify({"message":f"User {user_id} deleted "}),200
 if __name__ == "__main__":
     app.run(debug=True, threaded=False)  
