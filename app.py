@@ -52,4 +52,4 @@ def create():
     return jsonify(new_user),201
 
 if __name__ == "__main__":
-    app.run(debug=True, threaded=True)  
+    app.run(debug=True, threaded=False)  
