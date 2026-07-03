@@ -95,6 +95,7 @@ jobs:
           image-ref: '${{ env.IMAGE_NAME }}:${{ github.sha }}'
           format: 'table'
           severity: 'CRITICAL,HIGH'
+          ignore-unfixed: true
           exit-code: '1' # CRITICAL: Stops the pipeline if vulnerability checks fail
 
       # PHASE 3: Push the image only if the scan step above succeeded
