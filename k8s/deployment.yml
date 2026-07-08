@@ -74,7 +74,7 @@ spec:
     spec:
       containers:
         - name: flaskapi-ci-test
-          image: shivansh760/flask-api:36671c7d6652a6f701175447c71feef12a81edb8
+          image: shivansh760/flask-api:37b83002e7828b7e5014720a7e23c63e6551729c
           resources:
             requests:
               memory: "64Mi"
