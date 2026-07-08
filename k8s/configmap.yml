@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: flaskapi-config
+data:
+  POSTGRES_HOST: "postgres-service-flask"
+  POSTGRES_PORT: "5432"
+  POSTGRES_DB: "blog_db"
+  POSTGRES_USER: "bloguser"

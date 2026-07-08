@@ -1,6 +1,66 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  name: postgres
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres
+    spec:
+      containers:
+        - name: postgres
+          image: postgres:15
+          resources:
+            limits:
+              memory: "256Mi"
+              cpu: "500m"
+            requests:
+              memory: "128Mi"
+              cpu: "250m"
+          ports:
+            - containerPort: 5432
+          env:
+            # 1. Pulling the Username from the ConfigMap
+            - name: POSTGRES_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: flaskapi-config
+                  key: POSTGRES_USER
+
+            # 2. Pulling the Database Name from the ConfigMap
+            - name: POSTGRES_DB
+              valueFrom:
+                configMapKeyRef:
+                  name: flaskapi-config
+                  key: POSTGRES_DB
+
+            # 3. Pulling the Password from the Secret (Stays hidden!)
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: flaskapi-secrets
+                  key: POSTGRES_PASSWORD
+
+            # Tell Postgres to put its internal data inside the mounted folder
+            - name: PGDATA
+              value: /var/lib/postgresql/data/pgdata
+          volumeMounts:
+            - name: postgres-storage
+              mountPath: /var/lib/postgresql/data
+      volumes:
+        - name: postgres-storage
+          persistentVolumeClaim:
+            claimName: postgres-pvc-flask
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
   name: flaskapi-ci-test
 spec:
   replicas: 1
@@ -16,8 +76,16 @@ spec:
         - name: flaskapi-ci-test
           image: shivansh760/flask-api:c96f407f69147a86df9cc1934f931e9fd3eb0549
           resources:
+            requests:
+              memory: "64Mi"
+              cpu: "250m"
             limits:
               memory: "128Mi"
               cpu: "500m"
           ports:
             - containerPort: 5000
+          envFrom:
+            - configMapRef:
+                name: flaskapi-config
+            - secretRef:
+                name: flaskapi-secrets

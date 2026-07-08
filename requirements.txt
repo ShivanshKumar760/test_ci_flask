@@ -1,9 +1,10 @@
 # requirements.txt
 flask
 psycopg2-binary
-PyJWT
 SQLAlchemy
 flask-sqlalchemy
 python-dotenv
 flask-cors
 gunicorn==22.0.0
+pyjwt
+bcrypt
