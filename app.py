@@ -26,7 +26,7 @@ def register():
         return jsonify({"error":"password must be at least 6 characters"}),400
     
     conn = get_connection()
-    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictConnection)
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
 
     try:
         cur.execute(
@@ -59,7 +59,7 @@ def login():
     if not email or not password:
         return jsonify({"error":"email and password are required"}),400
     conn = get_connection()
-    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictConnection)
+    cur = conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute("SELECT * FROM users WHERE email = %s",(email,))
     user=cur.fetchone()
     cur.close()
@@ -82,7 +82,7 @@ def login():
 @login_required
 def me():
     conn = get_connection()
-    cur= conn.cursor(cursor_factory=psycopg2.extras.RealDictConnection)
+    cur= conn.cursor(cursor_factory=psycopg2.extras.RealDictCursor)
     cur.execute("SELECT id,username,email,created_at FROM users WHERE id = %s",(g.user_id,))
     user=cur.fetchone()
     cur.close()
