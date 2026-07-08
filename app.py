@@ -5,6 +5,7 @@ import psycopg2
 import psycopg2.extras
 
 app = Flask(__name__)
+init_db()
 
 
 @app.post("/auth/register")
@@ -54,7 +55,7 @@ def login():
     data = request.get_json()
     if not data:
         return jsonify({"error":"Request body must be JSON"}),400
-    email = data.get("email","").strp()
+    email = data.get("email","").strip()
     password = data.get("password","")
     if not email or not password:
         return jsonify({"error":"email and password are required"}),400
@@ -65,13 +66,13 @@ def login():
     cur.close()
     conn.close()
 
-    if not user or not check_password(password,user[password]):
+    if not user or not check_password(password,user["password"]):
         return jsonify({"error":"Invalid email or password"}),401
     token = create_token(user["id"],user["username"])
     return jsonify({
         "token":token,
         "user":{
-            "id":user[id],
+            "id":user["id"],
             "username":user["username"],
             "email":user["email"],
         }
@@ -346,5 +347,4 @@ def serialize_blog(row: dict) -> dict:
 
 # ─────────────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":
-    init_db()
     app.run(debug=True, port=5000)

@@ -33,11 +33,11 @@ def init_db():
     cur.execute("""
     CREATE TABLE IF NOT EXISTS blogs(
             id SERIAL PRIMARY KEY,
-            user_id VARCHAR(50) INTEGER REFERENCES users(id) ON DELETE CASCADE,
+            user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
             title VARCHAR(255)  NOT NULL,
             content TEXT NOT NULL,
             created_at TIMESTAMPTZ DEFAULT now(),
-            updated_at TIMESTAMPZ DEFAULT now()
+            updated_at TIMESTAMPTZ DEFAULT now()
     );
     """)
 
