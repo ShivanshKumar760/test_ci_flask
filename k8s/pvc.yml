@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: postgres-pvc-flask
+spec:
+  accessModes:
+    - ReadWriteOnce # Only one node can write to this storage at a time
+  resources:
+    requests:
+      storage: 1Gi # Adjust this size depending on your database needs
