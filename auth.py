@@ -33,7 +33,7 @@ def login_required(f):
     @wraps(f)
     def decorated(*args, **kwargs):
         header = request.headers.get("Authorization", "")
-        
+        print(header)
         if not header.startswith("Bearer "):
             return jsonify({"error": "Missing or malformed Authorization header"}), 401
             
